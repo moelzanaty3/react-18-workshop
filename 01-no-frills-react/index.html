@@ -13,22 +13,7 @@
   <div id="root">not rendered</div>
   <script src="https://unpkg.com/react@18.2.0/umd/react.development.js"></script>
   <script src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
-  <script>
-    // App Component
-    const App = () => {
-      return React.createElement(
-        "div",
-        {},
-        React.createElement("h1", {}, "Adopt Me!")
-      );
-    };
-    // Get Root Element
-    const container = document.getElementById('root');
-    // Create a root.
-    const root = ReactDOM.createRoot(container);
-    // Initial render
-    root.render(React.createElement(App));
-  </script>
+  <script src="./App.js"></script>
 </body>
 
 </html>
