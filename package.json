@@ -1,0 +1,19 @@
+{
+  "name": "react-18-workshop",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/moelzanaty3/react-18-workshop.git",
+  "author": "mohammedelzanaty <mohammedelzanaty129@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "commit": "cz"
+  },
+  "devDependencies": {
+    "cz-conventional-changelog": "3.3.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}
