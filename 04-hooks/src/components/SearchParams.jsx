@@ -25,21 +25,26 @@ const SearchParams = () => {
     setBreed(e.target.value);
   };
 
-  useEffect(() => {
-    const fetchPets = async () => {
-      const res = await fetch(
-        `http://pets-v2.dev-apis.com/pets?animal=${animal}&location=${location}&breed=${breed}`
-      );
-      const json = await res.json();
-      setPets(json.pets);
-    };
+  const fetchPets = async () => {
+    const res = await fetch(
+      `http://pets-v2.dev-apis.com/pets?animal=${animal}&location=${location}&breed=${breed}`
+    );
+    const json = await res.json();
+    setPets(json.pets);
+  };
 
+  useEffect(() => {
     fetchPets();
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="search-params">
-      <form>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          fetchPets();
+        }}
+      >
         <label htmlFor="location">
           Location
           <input
@@ -76,6 +81,7 @@ const SearchParams = () => {
             ))}
           </select>
         </label>
+        <button>Submit</button>
       </form>
       <div className="search">
         {!pets.length ? (
