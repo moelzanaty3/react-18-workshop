@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import useBreedList from '../hooks/useBreedList';
 import Pet from './Pet';
 
 const ANIMALS = ['bird', 'cat', 'dog', 'rabbit', 'reptile'];
@@ -9,7 +10,7 @@ const SearchParams = () => {
   const [breed, setBreed] = useState('');
   const [pets, setPets] = useState([]);
 
-  const breeds = [];
+  const breeds = useBreedList(animal);
 
   const handleLocationChange = (e) => {
     setLocation(e.target.value);
@@ -34,7 +35,7 @@ const SearchParams = () => {
     };
 
     fetchPets();
-  }, [animal, location, breed]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="search-params">
