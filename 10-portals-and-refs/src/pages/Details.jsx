@@ -1,9 +1,12 @@
+import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Carousel from '../components/Carousel';
 import Loader from '../components/Loader';
+import Modal from '../components/Modal';
 import usePet from '../hooks/usePet';
 
 const Details = () => {
+  const [showModal, setShowModal] = useState(false);
   const { id } = useParams();
   const petQuery = usePet(id);
   const navigate = useNavigate();
@@ -24,7 +27,7 @@ const Details = () => {
           <Carousel images={pet.images} />
           <h1>{pet.name}</h1>
           <h2>{`${pet.animal} — ${pet.breed} — ${pet.city}, ${pet.state}`}</h2>
-          <button>Adopt {pet.name}</button>
+          <button onClick={() => setShowModal(true)}>Adopt {pet.name}</button>
           <p>{pet.description}</p>
           <button
             onClick={() => {
@@ -33,6 +36,17 @@ const Details = () => {
           >
             Back
           </button>
+          {showModal && (
+            <Modal>
+              <div>
+                <h1>Would you like to adopt {pet.name}?</h1>
+                <div className="buttons">
+                  <button>Yes</button>
+                  <button onClick={() => setShowModal(false)}>No</button>
+                </div>
+              </div>
+            </Modal>
+          )}
         </div>
       )}
     </div>
