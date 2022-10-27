@@ -1,15 +1,18 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Carousel from '../components/Carousel';
 import Loader from '../components/Loader';
 import Modal from '../components/Modal';
 import usePet from '../hooks/usePet';
+import AdoptedPetContext from '../contexts/AdoptedPetContext';
 
 const Details = () => {
   const [showModal, setShowModal] = useState(false);
   const { id } = useParams();
   const petQuery = usePet(id);
   const navigate = useNavigate();
+  const [, setAdoptedPet] = useContext(AdoptedPetContext);
+
   let pet = petQuery?.data?.pets[0];
 
   return (
@@ -41,7 +44,14 @@ const Details = () => {
               <div>
                 <h1>Would you like to adopt {pet.name}?</h1>
                 <div className="buttons">
-                  <button>Yes</button>
+                  <button
+                    onClick={() => {
+                      setAdoptedPet(pet);
+                      navigate('/');
+                    }}
+                  >
+                    Yes
+                  </button>
                   <button onClick={() => setShowModal(false)}>No</button>
                 </div>
               </div>

@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import useBreedList from '../hooks/useBreedList';
 import Results from '../components/Results';
 import usePetsSearch from '../hooks/usePetsSearch';
 import Loader from '../components/Loader';
 import ErrorBoundary from '../components/ErrorBoundary';
+import AdoptedPetContext from '../contexts/AdoptedPetContext';
 
 const ANIMALS = ['bird', 'cat', 'dog', 'rabbit', 'reptile'];
 
@@ -13,6 +14,7 @@ const SearchParams = () => {
     animal: '',
     breed: '',
   });
+  const [adoptedPet] = useContext(AdoptedPetContext);
 
   const petsQuery = usePetsSearch(searchParams);
   const pets = petsQuery?.data?.pets ?? [];
@@ -33,6 +35,11 @@ const SearchParams = () => {
           setSearchParams({ animal, location, breed });
         }}
       >
+        {adoptedPet && (
+          <div className="pet image-container">
+            <img src={adoptedPet.images[0]} alt={adoptedPet.name} />
+          </div>
+        )}
         <label htmlFor="location">
           Location
           <input id="location" placeholder="Location" name="location" />
