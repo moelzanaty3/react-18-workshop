@@ -1,63 +1,54 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import useBreedList from '../hooks/useBreedList';
 import Results from '../components/Results';
+import usePetsSearch from '../hooks/usePetsSearch';
+import Loader from '../components/Loader';
 
 const ANIMALS = ['bird', 'cat', 'dog', 'rabbit', 'reptile'];
 
 const SearchParams = () => {
-  const [location, setLocation] = useState('');
-  const [animal, setAnimal] = useState('');
-  const [breed, setBreed] = useState('');
-  const [pets, setPets] = useState([]);
+  const [searchParams, setSearchParams] = useState({
+    location: '',
+    animal: '',
+    breed: '',
+  });
 
-  const breedsQuery = useBreedList(animal);
+  const petsQuery = usePetsSearch(searchParams);
+  const pets = petsQuery?.data?.pets ?? [];
+
+  const breedsQuery = useBreedList(searchParams.animal);
   let breeds = breedsQuery?.data?.breeds ?? [];
-
-  const handleLocationChange = (e) => {
-    setLocation(e.target.value);
-  };
-
-  const handleAnimalChange = (e) => {
-    setAnimal(e.target.value);
-    setBreed('');
-  };
-
-  const handleBreedChange = (e) => {
-    setBreed(e.target.value);
-  };
-
-  const fetchPets = async () => {
-    const res = await fetch(
-      `http://pets-v2.dev-apis.com/pets?animal=${animal}&location=${location}&breed=${breed}`
-    );
-    const json = await res.json();
-    setPets(json.pets);
-  };
-
-  useEffect(() => {
-    fetchPets();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="search-params">
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          fetchPets();
+          const formDate = new FormData(e.target);
+          console.log(e.target);
+          const animal = formDate.get('animal');
+          const location = formDate.get('location');
+          const breed = formDate.get('breed');
+          setSearchParams({ animal, location, breed });
         }}
       >
         <label htmlFor="location">
           Location
-          <input
-            id="location"
-            value={location}
-            placeholder="Location"
-            onChange={handleLocationChange}
-          />
+          <input id="location" placeholder="Location" name="location" />
         </label>
         <label htmlFor="animal">
           Animal
-          <select id="animal" value={animal} onChange={handleAnimalChange}>
+          <select
+            id="animal"
+            name="animal"
+            onChange={(e) => {
+              setSearchParams({
+                ...searchParams,
+                animal: e.target.value,
+                breed: '',
+              });
+            }}
+          >
             <option />
             {ANIMALS.map((animal) => (
               <option value={animal} key={animal}>
@@ -68,12 +59,7 @@ const SearchParams = () => {
         </label>
         <label htmlFor="breed">
           Breed
-          <select
-            disabled={!breeds.length}
-            id="breed"
-            value={breed}
-            onChange={handleBreedChange}
-          >
+          <select disabled={!breeds.length} id="breed" name="breed">
             <option />
             {breeds.map((breed) => (
               <option key={breed} value={breed}>
@@ -84,7 +70,13 @@ const SearchParams = () => {
         </label>
         <button>Submit</button>
       </form>
-      <Results pets={pets} />
+      {petsQuery.isLoading && (
+        <div className="search loader-container">
+          <Loader />
+        </div>
+      )}
+      {petsQuery.isError && <span>{petsQuery.error}</span>}
+      {petsQuery.data && <Results pets={pets} />}
     </div>
   );
 };
