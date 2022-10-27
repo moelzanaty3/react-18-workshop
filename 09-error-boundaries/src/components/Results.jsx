@@ -1,6 +1,7 @@
 import Pet from './Pet';
 
 const Results = ({ pets }) => {
+  // throw new Error('I Crashed 🤷🏻‍♂️');
   return (
     <div className="search">
       {!pets.length && <h1>No Pets Found</h1>}

@@ -3,6 +3,7 @@ import useBreedList from '../hooks/useBreedList';
 import Results from '../components/Results';
 import usePetsSearch from '../hooks/usePetsSearch';
 import Loader from '../components/Loader';
+import ErrorBoundary from '../components/ErrorBoundary';
 
 const ANIMALS = ['bird', 'cat', 'dog', 'rabbit', 'reptile'];
 
@@ -76,7 +77,11 @@ const SearchParams = () => {
         </div>
       )}
       {petsQuery.isError && <span>{petsQuery.error}</span>}
-      {petsQuery.isFetched && <Results pets={pets} />}
+      {petsQuery.data && (
+        <ErrorBoundary>
+          <Results pets={pets} />
+        </ErrorBoundary>
+      )}
     </div>
   );
 };
