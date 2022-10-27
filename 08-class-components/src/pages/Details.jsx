@@ -1,4 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom';
+import Carousel from '../components/Carousel';
 import Loader from '../components/Loader';
 import usePet from '../hooks/usePet';
 
@@ -20,6 +21,7 @@ const Details = () => {
       {/* also it will nice to understand more about Status Checks in React Query - https://tkdodo.eu/blog/status-checks-in-react-query */}
       {petQuery.data && (
         <div>
+          <Carousel images={pet.images} />
           <h1>{pet.name}</h1>
           <h2>{`${pet.animal} — ${pet.breed} — ${pet.city}, ${pet.state}`}</h2>
           <button>Adopt {pet.name}</button>
