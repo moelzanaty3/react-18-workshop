@@ -10,7 +10,8 @@ const SearchParams = () => {
   const [breed, setBreed] = useState('');
   const [pets, setPets] = useState([]);
 
-  const breeds = useBreedList(animal);
+  const breedsQuery = useBreedList(animal);
+  let breeds = breedsQuery?.data?.breeds ?? [];
 
   const handleLocationChange = (e) => {
     setLocation(e.target.value);
