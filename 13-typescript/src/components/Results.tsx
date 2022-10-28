@@ -1,6 +1,11 @@
+import { Pet as PetType } from '../types/common';
 import Pet from './Pet';
 
-const Results = ({ pets }) => {
+type Props = {
+  pets: PetType[];
+};
+
+const Results = ({ pets }: Props) => {
   // throw new Error('I Crashed 🤷🏻‍♂️');
   return (
     <div className="search">

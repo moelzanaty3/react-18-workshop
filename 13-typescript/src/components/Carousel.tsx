@@ -1,7 +1,16 @@
 import { Component } from 'react';
 
-class Carousel extends Component {
-  state = {
+type Props = {
+  images: string[];
+};
+
+type State = {
+  active: number;
+};
+
+class Carousel extends Component<Props, State> {
+  // Why annotate State Twice? -> https://github.com/typescript-cheatsheets/react/issues/57
+  state: State = {
     active: 0,
   };
 
@@ -24,9 +33,15 @@ class Carousel extends Component {
               alt="animal thumbnail"
               data-index={index}
               key={photo}
-              onClick={(e) =>
-                this.setState({ active: +e.target.dataset.index })
-              }
+              onClick={(e: React.MouseEvent<HTMLImageElement>) => {
+                // If event target not an HTMLImageElement, exit
+                if (!(e.target instanceof HTMLImageElement)) {
+                  return;
+                }
+                if (e.target.dataset.index) {
+                  this.setState({ active: +e.target.dataset.index });
+                }
+              }}
             />
           ))}
         </div>

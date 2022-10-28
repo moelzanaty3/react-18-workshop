@@ -1,7 +1,17 @@
-import { Component } from 'react';
+import { Component, ErrorInfo, ReactElement } from 'react';
 
-class ErrorBoundary extends Component {
-  constructor(props) {
+type Props = {
+  children: ReactElement;
+};
+
+type State = {
+  hasError: boolean;
+  error: Error | null;
+  errorInfo: ErrorInfo | null;
+};
+
+class ErrorBoundary extends Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = { hasError: false, error: null, errorInfo: null };
   }
@@ -11,7 +21,7 @@ class ErrorBoundary extends Component {
     return { hasError: true };
   }
 
-  componentDidCatch(error, errorInfo) {
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     // You can also log the error to an error reporting service like  Sentry and TrackJS.
     // logErrorToMyService(error, errorInfo);
     // Catch errors in any components below and re-render with error message
