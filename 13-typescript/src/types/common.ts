@@ -10,3 +10,22 @@ export interface Pet {
   breed: string;
   images: string[];
 }
+
+export interface SearchPetsAPIResponse {
+  numberOfResults: number;
+  startIndex: number;
+  endIndex: number;
+  hasNext: boolean;
+  pets: Pet[];
+}
+
+export interface BreedListAPIResponse {
+  animal: Animal;
+  breeds: string[];
+}
+
+export interface SearchParams {
+  location: string;
+  animal: Animal;
+  breed: string;
+}
