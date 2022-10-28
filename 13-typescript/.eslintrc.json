@@ -7,11 +7,14 @@
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
+    "plugin:@typescript-eslint/recommended",
     "plugin:import/recommended",
+    "plugin:import/typescript",
     "plugin:jsx-a11y/recommended",
     "plugin:react-hooks/recommended",
     "prettier"
   ],
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
@@ -19,7 +22,7 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "plugins": ["react", "import", "jsx-a11y"],
+  "plugins": ["react", "import", "jsx-a11y", "@typescript-eslint"],
   "rules": {
     "react/prop-types": 0,
     "react/react-in-jsx-scope": 0
@@ -28,9 +31,12 @@
     "react": {
       "version": "detect"
     },
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"]
+    },
     "import/resolver": {
       "node": {
-        "extensions": [".js", ".jsx"]
+        "extensions": [".ts", ".tsx"]
       }
     }
   }
