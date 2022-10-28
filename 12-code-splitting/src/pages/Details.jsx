@@ -1,10 +1,11 @@
-import { useState, useContext } from 'react';
+import { useContext, useState, lazy } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Carousel from '../components/Carousel';
 import Loader from '../components/Loader';
-import Modal from '../components/Modal';
 import usePet from '../hooks/usePet';
 import AdoptedPetContext from '../contexts/AdoptedPetContext';
+
+const Modal = lazy(() => import('../components/Modal'));
 
 const Details = () => {
   const [showModal, setShowModal] = useState(false);
