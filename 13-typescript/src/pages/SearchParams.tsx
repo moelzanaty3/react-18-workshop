@@ -5,13 +5,14 @@ import usePetsSearch from '../hooks/usePetsSearch';
 import Loader from '../components/Loader';
 import ErrorBoundary from '../components/ErrorBoundary';
 import AdoptedPetContext from '../contexts/AdoptedPetContext';
+import { Animal, SearchParams as SearchParamsType } from '../types/common';
 
 const ANIMALS = ['bird', 'cat', 'dog', 'rabbit', 'reptile'];
 
 const SearchParams = () => {
-  const [searchParams, setSearchParams] = useState({
+  const [searchParams, setSearchParams] = useState<SearchParamsType>({
     location: '',
-    animal: '',
+    animal: '' as Animal,
     breed: '',
   });
   const [adoptedPet] = useContext(AdoptedPetContext);
@@ -20,19 +21,20 @@ const SearchParams = () => {
   const pets = petsQuery?.data?.pets ?? [];
 
   const breedsQuery = useBreedList(searchParams.animal);
-  let breeds = breedsQuery?.data?.breeds ?? [];
+  const breeds = breedsQuery?.data?.breeds ?? [];
 
   return (
     <div className="search-params">
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          const formDate = new FormData(e.target);
-          console.log(e.target);
+          const formDate = new FormData(e.currentTarget);
+          // get values
           const animal = formDate.get('animal');
           const location = formDate.get('location');
           const breed = formDate.get('breed');
-          setSearchParams({ animal, location, breed });
+          // search pet
+          setSearchParams({ animal, location, breed } as SearchParamsType);
         }}
       >
         {adoptedPet && (
@@ -52,7 +54,7 @@ const SearchParams = () => {
             onChange={(e) => {
               setSearchParams({
                 ...searchParams,
-                animal: e.target.value,
+                animal: e.target.value as Animal,
                 breed: '',
               });
             }}
@@ -83,8 +85,8 @@ const SearchParams = () => {
           <Loader />
         </div>
       )}
-      {petsQuery.isError && <span>{petsQuery.error}</span>}
-      {petsQuery.isFetched && (
+      {petsQuery.isError && <span>{(petsQuery.error as Error).message}</span>}
+      {petsQuery.data && (
         <ErrorBoundary>
           <Results pets={pets} />
         </ErrorBoundary>

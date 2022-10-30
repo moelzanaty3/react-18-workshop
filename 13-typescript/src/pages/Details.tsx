@@ -4,17 +4,23 @@ import Carousel from '../components/Carousel';
 import Loader from '../components/Loader';
 import usePet from '../hooks/usePet';
 import AdoptedPetContext from '../contexts/AdoptedPetContext';
+import { Pet } from '../types/common';
 
 const Modal = lazy(() => import('../components/Modal'));
 
 const Details = () => {
   const [showModal, setShowModal] = useState(false);
   const { id } = useParams();
-  const petQuery = usePet(id);
+
+  if (!id) {
+    throw new Error('no id provided to details');
+  }
+
+  const petQuery = usePet(+id);
   const navigate = useNavigate();
   const [, setAdoptedPet] = useContext(AdoptedPetContext);
 
-  let pet = petQuery?.data?.pets[0];
+  const pet = petQuery?.data?.pets[0] as Pet;
 
   return (
     <div className="details">
@@ -23,8 +29,10 @@ const Details = () => {
           <Loader />
         </div>
       )}
-      {petQuery.isError && <span>{petQuery.error.message}</span>}
-      {petQuery.isFetched && (
+      {petQuery.isError && <span>{(petQuery.error as Error).message}</span>}
+      {/* read more about diff btw isLoading/isFetching - https://stackoverflow.com/a/62653366/6483379 */}
+      {/* also it will nice to understand more about Status Checks in React Query - https://tkdodo.eu/blog/status-checks-in-react-query */}
+      {petQuery.data && (
         <div>
           <Carousel images={pet.images} />
           <h1>{pet.name}</h1>

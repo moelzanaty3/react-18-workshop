@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import AdoptedPetContext from './contexts/AdoptedPetContext';
 import Loader from './components/Loader';
+import { Pet } from './types/common';
 
 // https://bundlephobia.com/package/react@18.2.0
 // https://bundlephobia.com/package/react-dom@18.2.0
@@ -24,7 +25,7 @@ const queryClient = new QueryClient({
 
 // App Component
 const App = () => {
-  const adoptedPet = useState(null);
+  const adoptedPet = useState<Pet | null>(null);
 
   return (
     <BrowserRouter>
@@ -55,6 +56,6 @@ const App = () => {
 // Get Root Element
 const container = document.getElementById('root');
 // Create a root.
-const root = ReactDOM.createRoot(container);
+const root = ReactDOM.createRoot(container as HTMLDivElement);
 // Initial render
 root.render(<App />);
