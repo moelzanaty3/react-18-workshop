@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["vite.config.ts"]
+}
+
+// <-- https://stackoverflow.com/a/72030801/6483379 -->
+// You need two different TS configs because the project is using two different environments in which the TypeScript code is executed:
+//   - Your app (src folder) is targeting (will be running) inside the browser
+//   - Vite itself including it's config is running on your computer inside Node, which is totally different environment (compared with browser) with different API's and constraints
+// So there are two different configs for those two environments and two distinct sets of source files...
