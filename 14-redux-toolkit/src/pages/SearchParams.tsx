@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useContext } from 'react';
 import useBreedList from '../hooks/useBreedList';
 import Results from '../components/Results';
 import usePetsSearch from '../hooks/usePetsSearch';
@@ -6,16 +6,17 @@ import Loader from '../components/Loader';
 import ErrorBoundary from '../components/ErrorBoundary';
 import AdoptedPetContext from '../contexts/AdoptedPetContext';
 import { Animal, SearchParams as SearchParamsType } from '../types/common';
+import { searchAllPets } from '../features/search-pets/searchPetsSlice';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
 
 const ANIMALS = ['bird', 'cat', 'dog', 'rabbit', 'reptile'];
 
 const SearchParams = () => {
-  const [searchParams, setSearchParams] = useState<SearchParamsType>({
-    location: '',
-    animal: '' as Animal,
-    breed: '',
-  });
   const [adoptedPet] = useContext(AdoptedPetContext);
+
+  // The `state` arg is correctly typed as `RootState` already
+  const searchParams = useAppSelector((state) => state.searchPetsParams.value);
+  const dispatch = useAppDispatch();
 
   const petsQuery = usePetsSearch(searchParams);
   const pets = petsQuery?.data?.pets ?? [];
@@ -34,7 +35,9 @@ const SearchParams = () => {
           const location = formDate.get('location');
           const breed = formDate.get('breed');
           // search pet
-          setSearchParams({ animal, location, breed } as SearchParamsType);
+          dispatch(
+            searchAllPets({ animal, location, breed } as SearchParamsType)
+          );
         }}
       >
         {adoptedPet && (
@@ -44,19 +47,27 @@ const SearchParams = () => {
         )}
         <label htmlFor="location">
           Location
-          <input id="location" placeholder="Location" name="location" />
+          <input
+            id="location"
+            placeholder="Location"
+            name="location"
+            defaultValue={searchParams.location}
+          />
         </label>
         <label htmlFor="animal">
           Animal
           <select
             id="animal"
             name="animal"
+            defaultValue={searchParams.animal}
             onChange={(e) => {
-              setSearchParams({
-                ...searchParams,
-                animal: e.target.value as Animal,
-                breed: '',
-              });
+              dispatch(
+                searchAllPets({
+                  ...searchParams,
+                  animal: e.target.value as Animal,
+                  breed: '',
+                })
+              );
             }}
           >
             <option />
@@ -69,7 +80,12 @@ const SearchParams = () => {
         </label>
         <label htmlFor="breed">
           Breed
-          <select disabled={!breeds.length} id="breed" name="breed">
+          <select
+            disabled={!breeds.length}
+            id="breed"
+            name="breed"
+            defaultValue={searchParams.breed}
+          >
             <option />
             {breeds.map((breed) => (
               <option key={breed} value={breed}>
