@@ -1,13 +1,12 @@
 import { useContext } from 'react';
-import useBreedList from '../hooks/useBreedList';
 import Results from '../components/Results';
-import usePetsSearch from '../hooks/usePetsSearch';
 import Loader from '../components/Loader';
 import ErrorBoundary from '../components/ErrorBoundary';
 import AdoptedPetContext from '../contexts/AdoptedPetContext';
 import { Animal, SearchParams as SearchParamsType } from '../types/common';
 import { searchAllPets } from '../features/search-pets/searchPetsSlice';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { useGetBreedsQuery, usePetsSearchQuery } from '../services/pet';
 
 const ANIMALS = ['bird', 'cat', 'dog', 'rabbit', 'reptile'];
 
@@ -18,10 +17,12 @@ const SearchParams = () => {
   const searchParams = useAppSelector((state) => state.searchPetsParams.value);
   const dispatch = useAppDispatch();
 
-  const petsQuery = usePetsSearch(searchParams);
+  const petsQuery = usePetsSearchQuery(searchParams);
   const pets = petsQuery?.data?.pets ?? [];
 
-  const breedsQuery = useBreedList(searchParams.animal);
+  const breedsQuery = useGetBreedsQuery(searchParams.animal, {
+    skip: !searchParams.animal,
+  });
   const breeds = breedsQuery?.data?.breeds ?? [];
 
   return (

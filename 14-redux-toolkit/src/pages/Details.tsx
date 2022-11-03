@@ -2,9 +2,9 @@ import { useContext, useState, lazy } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Carousel from '../components/Carousel';
 import Loader from '../components/Loader';
-import usePet from '../hooks/usePet';
 import AdoptedPetContext from '../contexts/AdoptedPetContext';
 import { Pet } from '../types/common';
+import { useGetPetQuery } from '../services/pet';
 
 const Modal = lazy(() => import('../components/Modal'));
 
@@ -15,8 +15,8 @@ const Details = () => {
   if (!id) {
     throw new Error('no id provided to details');
   }
-
-  const petQuery = usePet(+id);
+  // Using a query hook automatically fetches data and returns query values
+  const petQuery = useGetPetQuery(+id);
   const navigate = useNavigate();
   const [, setAdoptedPet] = useContext(AdoptedPetContext);
 

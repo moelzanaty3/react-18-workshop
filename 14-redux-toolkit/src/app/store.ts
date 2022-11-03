@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import searchPetsParams from '../features/search-pets/searchPetsSlice';
+import { petApi } from '../services/pet';
 
 /**
  * configureStore -> this is a wrapper around the basic Redux Create Store Function.
@@ -13,7 +14,13 @@ import searchPetsParams from '../features/search-pets/searchPetsSlice';
 export const store = configureStore({
   reducer: {
     searchPetsParams,
+    // Add the generated reducer as a specific top-level slice
+    [petApi.reducerPath]: petApi.reducer,
   },
+  // adding the api middleware enables caching, invalidation, polling
+  // and other features of `rtk-query`
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(petApi.middleware),
   devTools: process.env.NODE_ENV !== 'production',
 });
 
