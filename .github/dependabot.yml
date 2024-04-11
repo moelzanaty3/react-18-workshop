@@ -1,45 +1,11 @@
 version: 2
 updates:
   - package-ecosystem: github-actions
-    directory: "/"
+    directory: /
     schedule:
       interval: daily
-    open-pull-requests-limit: 10
-    versioning-strategy: auto
-    target-branch: main
-    commit-message:
-      prefix: chore
-      include: scope
-    labels:
-      - dependencies
-      - github-actions
-    reviewers:
-      - moelzanaty3
-    assignees:
-      - moelzanaty3
-    allow:
-      - dependency-type: direct
-    ignore:
-      - dependency-name: express
-    milestone: 1
 
   - package-ecosystem: npm
-    directory: "/"
+    directory: /
     schedule:
       interval: daily
-    open-pull-requests-limit: 10
-    versioning-strategy: auto
-    target-branch: main
-    commit-message:
-      prefix: chore
-      include: scope
-    labels:
-      - dependencies
-      - npm
-    reviewers:
-      - moelzanaty3
-    assignees:
-      - moelzanaty3
-    allow:
-      - dependency-type: direct
-    milestone: 1
